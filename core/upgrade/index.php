@@ -52,7 +52,7 @@ if (sizeof($_POST) > 0) {
 
 	// run source update
 	if ($do["source"] && permission_exists("upgrade_source") && !is_dir("/usr/share/examples/fusionpbx")) {
-		chdir($_SERVER["DOCUMENT_ROOT"]);
+		chdir($_SERVER["PROJECT_ROOT"]);
 		exec("git pull", $response_source_update);
 		$update_failed = true;
 		if (sizeof($response_source_update) > 0) {
@@ -142,7 +142,7 @@ echo "<br><br>";
 
 echo "<form name='frm' method='post' action=''>\n";
 
-if (permission_exists("upgrade_source") && !is_dir("/usr/share/examples/fusionpbx")) {
+if (permission_exists("upgrade_source") && !is_dir("/usr/share/examples/fusionpbx") && is_writeable($_SERVER["PROJECT_ROOT"]."/.git")) {
 	echo "<table width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 	echo "<tr>\n";
 	echo "	<td width='30%' class='vncell'>\n";

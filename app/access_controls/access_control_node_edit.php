@@ -85,6 +85,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 				$db->exec(check_sql($sql));
 				unset($sql);
 
+				remove_config_from_cache('configuration:acl.conf');
 				$_SESSION['message'] = $text['message-add'];
 				header('Location: access_control_edit.php?id='.$access_control_uuid);
 				return;
@@ -102,12 +103,13 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 				$db->exec(check_sql($sql));
 				unset($sql);
 
+				remove_config_from_cache('configuration:acl.conf');
 				$_SESSION['message'] = $text['message-update'];
 				header('Location: access_control_edit.php?id='.$access_control_uuid);
 				return;
 
 			} //if ($action == "update")
-		} //if ($_POST["persistformvar"] != "true") 
+		} //if ($_POST["persistformvar"] != "true")
 } //(count($_POST)>0 && strlen($_POST["persistformvar"]) == 0)
 
 //pre-populate the form
@@ -156,13 +158,13 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "<td class='vtable' align='left'>\n";
 	echo "	<select class='formfld' name='node_type'>\n";
 	echo "	<option value=''></option>\n";
-	if ($node_type == "allow") { 
+	if ($node_type == "allow") {
 		echo "	<option value='allow' selected='selected'>".$text['label-allow']."</option>\n";
 	}
 	else {
 		echo "	<option value='allow'>".$text['label-allow']."</option>\n";
 	}
-	if ($node_type == "deny") { 
+	if ($node_type == "deny") {
 		echo "	<option value='deny' selected='selected'>".$text['label-deny']."</option>\n";
 	}
 	else {

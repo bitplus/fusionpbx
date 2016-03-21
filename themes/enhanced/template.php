@@ -38,7 +38,7 @@
 	}
 	else {
 		$favicon = '<!--{project_path}-->/themes/enhanced/favicon.ico';
-        }
+	}
 ?>
 <link rel="icon" href="<?php echo $favicon; ?>">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -1009,6 +1009,7 @@ legend {
 		-moz-border-radius: 3px;
 		border-radius: 3px;
 		padding: 20px;
+		margin-bottom: 15px;
 		}
 
 /* operator panel styles begin */
@@ -1201,11 +1202,98 @@ legend {
 
 /* operator panel styles end */
 
-SPAN.playback_progress_bar {
-	background-color: #c43e42;
-	height: 1px;
-	display: inline-block;
-	}
+	SPAN.playback_progress_bar {
+		background-color: #c43e42;
+		height: 1px;
+		display: inline-block;
+		}
+
+/* dashboard hud styles begin */
+
+	td.hud_box {
+		height: auto;
+		vertical-align: top;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		text-align: center;
+		background-color: #f5f7fa;
+		background-image: -ms-linear-gradient(left, #edf1f7 0%, #f9fbfe 30%, #f9fbfe 70%, #edf1f7 100%);
+		background-image: -moz-linear-gradient(left, #edf1f7 0%, #f9fbfe 30%, #f9fbfe 70%, #edf1f7 100%);
+		background-image: -o-linear-gradient(left, #edf1f7 0%, #f9fbfe 30%, #f9fbfe 70%, #edf1f7 100%);
+		background-image: -webkit-gradient(linear, left, right, color-stop(0, #edf1f7), color-stop(0.30, #f9fbfe), color-stop(0.70, #f9fbfe), color-stop(1, #edf1f7));
+		background-image: -webkit-linear-gradient(left, #edf1f7 0%, #f9fbfe 30%, #f9fbfe 70%, #edf1f7 100%);
+		background-image: linear-gradient(to right, #edf1f7 0%, #f9fbfe 30%, #f9fbfe 70%, #edf1f7 100%);
+		}
+
+	span.hud_title {
+		display: block;
+		font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+		text-shadow: 0px 1px 2px #000;
+		letter-spacing: -0.02em;
+		font-size: 12pt;
+		color: #fff;
+		width: 100%;
+		height: 40px;
+		cursor: default;
+		text-align: center;
+		line-height: 40px;
+		background-color: #8e96a5;
+		-webkit-border-radius: 4px 4px 0 0;
+		-moz-border-radius: 4px 4px 0 0;
+		border-radius: 4px 4px 0 0;
+		border-bottom: 1px solid #737983;
+		}
+
+	span.hud_stat {
+		display: block;
+		cursor: pointer;
+		text-align: center;
+		text-shadow: 0px 2px 2px #737983;
+		width: 100%;
+		height: 130px;
+		color: #fff;
+		font-size: 75px;
+		font-weight: normal;
+		background-color: #a4aebf;
+		border-top: 1px solid #c5d1e5;
+		border-bottom: 1px solid #909aa8;
+		padding-top: 10px;
+		margin-bottom: 6px;
+		}
+
+	span.hud_stat_title {
+		display: block;
+		width: 100%;
+		height: 30px;
+		cursor: pointer;
+		text-align: center;
+		text-shadow: 0px 1px 1px #737983;
+		color: #fff;
+		font-size: 14px;
+		font-weight: normal;
+		font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+		}
+
+	span.hud_stat:hover {
+		opacity: 0.9;
+		cursor: pointer;
+		}
+
+	th.hud_heading {
+		font-size: 11px;
+		font-weight: bold;
+		color: black;
+		text-align: left;
+		}
+
+	td.hud_text {
+		font-size: 11px;
+		color: black;
+		text-align: left;
+		}
+
+/* dashboard hud styles end */
 
 </style>
 

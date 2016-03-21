@@ -36,7 +36,7 @@ else {
 }
 
 //detect billing app
-	$billing_app_exists = file_exists($_SERVER['DOCUMENT_ROOT'].PROJECT_PATH."/app/billing/app_config.php");
+	$billing_app_exists = file_exists($_SERVER["PROJECT_ROOT"]."/app/billing/app_config.php");
 
 	if ($billing_app_exists) {
 		require_once "app/billing/resources/functions/currency.php";
@@ -744,8 +744,8 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 			if (count($result) > 0) {
 				echo "<optgroup label='Phrases'>\n";
 				foreach ($result as &$row) {
-					$selected = ($fax_send_greeting == "phrase:".$row["phrase_name"].".".$domain_uuid) ? true : false;
-					echo "	<option value='phrase:".$row["phrase_name"].".".$domain_uuid."' ".(($selected) ? "selected='selected'" : null).">".$row["phrase_name"]."</option>\n";
+					$selected = ($fax_send_greeting == "phrase:".$row["phrase_uuid"]) ? true : false;
+					echo "	<option value='phrase:".$row["phrase_uuid"]."' ".(($selected) ? "selected='selected'" : null).">".$row["phrase_name"]."</option>\n";
 					if ($selected) { $tmp_selected = true; }
 				}
 				unset ($prep_statement);
@@ -820,7 +820,7 @@ if (count($_POST)>0 && strlen($_POST["persistformvar"]) == 0) {
 	echo "		<td colspan='2' align='right'>\n";
 	echo "			<br>";
 	if ($action == "update") {
-		if (if_group("user")) {
+		if (!permission_exists('fax_extension_delete')) {
 			echo "	<input type='hidden' name='fax_name' value=\"$fax_name\">\n";
 			echo "	<input type='hidden' name='fax_extension' value=\"$fax_extension\">\n";
 			echo "	<input type='hidden' name='fax_destination_number' value=\"$fax_destination_number\">\n";

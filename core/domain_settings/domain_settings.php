@@ -173,7 +173,7 @@ if (sizeof($_REQUEST) > 1) {
 					&& permission_exists("domain_setting_add")
 					&& count($_SESSION['domains']) > 1) ||
 					permission_exists('domain_setting_delete')) {
-						echo "<th style='width: 30px; text-align: center; padding: 0px;'><input type='checkbox' onchange=\"(this.checked) ? check('all','".strtolower($row['domain_setting_category'])."') : check('none','".strtolower($row['domain_setting_category'])."');\"></th>";
+						echo "<th style='width: 30px; text-align: center; padding: 0px;'><input type='checkbox' id='chk_all_".$row['domain_setting_category']."' class='chk_all' onchange=\"(this.checked) ? check('all','".strtolower($row['domain_setting_category'])."') : check('none','".strtolower($row['domain_setting_category'])."');\"></th>";
 				}
 				echo "<th>".$text['label-subcategory']."</th>";
 				echo "<th>".$text['label-type']."</th>";
@@ -196,7 +196,7 @@ if (sizeof($_REQUEST) > 1) {
 				(permission_exists("domain_select") && permission_exists("domain_setting_add") && count($_SESSION['domains']) > 1) ||
 				permission_exists("domain_setting_delete")
 				) {
-				echo "	<td valign='top' class='".$row_style[$c]." tr_link_void' style='text-align: center; padding: 3px 0px 0px 0px;'><input type='checkbox' name='id[]' id='checkbox_".$row['domain_setting_uuid']."' value='".$row['domain_setting_uuid']."'></td>\n";
+				echo "	<td valign='top' class='".$row_style[$c]." tr_link_void' style='text-align: center; padding: 3px 0px 0px 0px;'><input type='checkbox' name='id[]' id='checkbox_".$row['domain_setting_uuid']."' value='".$row['domain_setting_uuid']."' onclick=\"if (!this.checked) { document.getElementById('chk_all_".$row['domain_setting_category']."').checked = false; }\"></td>\n";
 				$subcat_ids[strtolower($row['domain_setting_category'])][] = 'checkbox_'.$row['domain_setting_uuid'];
 			}
 			echo "	<td valign='top' class='".$row_style[$c]."'>";
@@ -236,7 +236,7 @@ if (sizeof($_REQUEST) > 1) {
 			echo "		&nbsp;\n";
 			echo "	</td>\n";
 			echo "	<td valign='top' class='".$row_style[$c]." tr_link_void' style='text-align: center;'>\n";
-			echo "		<a href='?domain_id=".$row['domain_uuid']."&id[]=".$row['domain_setting_uuid']."&enabled=".(($row['domain_setting_enabled'] == 'true') ? 'false' : 'true')."'>".ucwords($row['domain_setting_enabled'])."</a>\n";
+			echo "		<a href='?domain_id=".$row['domain_uuid']."&id[]=".$row['domain_setting_uuid']."&enabled=".(($row['domain_setting_enabled'] == 'true') ? 'false' : 'true')."'>".$text['label-'.$row['domain_setting_enabled']]."</a>\n";
 			echo "	</td>\n";
 			echo "	<td valign='top' class='row_stylebg'>".$row['domain_setting_description']."&nbsp;</td>\n";
 			echo "	<td class='list_control_icons'>";
@@ -255,16 +255,7 @@ if (sizeof($_REQUEST) > 1) {
 	} //end if results
 
 	echo "<tr>\n";
-	if (
-		(permission_exists("domain_select") && permission_exists("domain_setting_add") && count($_SESSION['domains']) > 1) ||
-		permission_exists("domain_delete")
-		) {
-		$colspan = 7;
-	}
-	else {
-		$colspan = 6;
-	}
-	echo "<td colspan='".$colspan."' align='left'>\n";
+	echo "<td colspan='20' align='left'>\n";
 	echo "	<table width='100%' cellpadding='0' cellspacing='0'>\n";
 	echo "	<tr>\n";
 	echo "		<td width='33.3%' nowrap>&nbsp;</td>\n";
@@ -274,7 +265,7 @@ if (sizeof($_REQUEST) > 1) {
 		echo 		"<a href='domain_setting_edit.php?domain_uuid=".check_str($_GET['id'])."' alt='".$text['button-add']."'>$v_link_label_add</a>";
 	}
 	if (permission_exists('domain_setting_delete') && $result_count > 0) {
-		echo "<a href='javascript:void(0);' onclick=\"if (confirm('".$text['confirm-delete']."')) { document.getElementById('action').value = 'delete'; document.getElementById('domain_frm').submit(); }\" alt='".$text['button-delete']."'>".$v_link_label_delete."</a>";
+		echo 		"<a href='javascript:void(0);' onclick=\"if (confirm('".$text['confirm-delete']."')) { document.getElementById('action').value = 'delete'; document.getElementById('domain_frm').submit(); }\" alt='".$text['button-delete']."'>".$v_link_label_delete."</a>";
 	}
 	echo "		</td>\n";
 	echo "	</tr>\n";

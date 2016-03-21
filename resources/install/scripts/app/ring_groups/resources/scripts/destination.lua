@@ -25,7 +25,7 @@
 
 --include config.lua
 	require "resources.functions.config";
-	
+
 --connect to the database
 	require "resources.functions.database_handle";
 	dbh = database_handle('system');
@@ -39,33 +39,35 @@
 
 --define uuid function
 	local random = math.random;
-	local function uuid();
-	local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
-	return string.gsub(template, '[xy]', function (c)
-		local v = (c == 'x') and random(0, 0xf) or random(8, 0xb);
-		return string.format('%x', v);
-	end)
+	local function uuid()
+		local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+		return string.gsub(template, '[xy]', function (c)
+			local v = (c == 'x') and random(0, 0xf) or random(8, 0xb);
+			return string.format('%x', v);
+		end)
 	end
 
 --get session variables
 	if (session:ready()) then
 		session:answer();
 		--session:execute("info", "");
-		destination_number = session:getVariable("destination_number");
+		destination = session:getVariable("destination");
 		pin_number = session:getVariable("pin_number");
 		sounds_dir = session:getVariable("sounds_dir");
 		ring_group_uuid = session:getVariable("ring_group_uuid");
+		domain_uuid = session:getVariable("domain_uuid");
 	end
 
 --get the domain uuid and set other required variables
 	if (session:ready()) then
 		--get info for the ring group
-			sql = "SELECT * FROM v_ring_groups ";
-			sql = sql .. "where ring_group_uuid = '"..ring_group_uuid.."' ";
-			status = dbh:query(sql, function(row)
-				domain_uuid = row["domain_uuid"];
-			end);
+			--sql = "SELECT * FROM v_ring_groups ";
+			--sql = sql .. "where ring_group_uuid = '"..ring_group_uuid.."' ";
+			--status = dbh:query(sql, function(row)
+			--	domain_uuid = row["domain_uuid"];
+			--end);
 
+		--set destination defaults
 			destination_timeout = 15;
 			destination_delay = 0;
 
@@ -89,7 +91,15 @@
 		end
 	end
 
---press 1 to login and 2 to logout
+--get the destination
+	--if (session:ready()) then
+	--	if string.len(destination) == 0) then
+	--		destination = session:playAndGetDigits(1, 1, max_tries, digit_timeout, "#", "ivr/ivr-enter_destination_telephone_number.wav", "", "\\d+");
+	--		freeswitch.consoleLog("NOTICE", "[ring_group] destination: "..destination.."\n");
+	--	end
+	--end
+
+--login or logout
 	if (session:ready()) then
 		menu_selection = session:playAndGetDigits(1, 1, max_tries, digit_timeout, "#", "ivr/ivr-enter_destination_telephone_number.wav", "", "\\d+");
 		freeswitch.consoleLog("NOTICE", "[ring_group] menu_selection: "..menu_selection.."\n");
@@ -99,33 +109,33 @@
 				SELECT COUNT(*) AS in_group FROM
 					v_ring_group_destinations
 				WHERE
-					domain_uuid = ']]..domain_uuid..[[' 
+					domain_uuid = ']]..domain_uuid..[['
 					AND ring_group_uuid = ']]..ring_group_uuid..[['
-					AND destination_number = ']]..destination_number..[['
+					AND destination_number = ']]..destination..[['
 			]];
 			--freeswitch.consoleLog("NOTICE", "[ring_group] SQL "..sql.."\n");
 
 			assert(dbh:query(sql, function(row)
 				if (row.in_group == "0") then
 					sql = [[
-						INSERT INTO 
-							v_ring_group_destinations 
+						INSERT INTO
+							v_ring_group_destinations
 								(	ring_group_destination_uuid,
-									domain_uuid, 
-									ring_group_uuid, 
+									domain_uuid,
+									ring_group_uuid,
 									destination_number,
 									destination_delay,
 									destination_timeout
-								) 
-						VALUES 
+								)
+						VALUES
 								(	']]..ring_group_destination_uuid..[[',
-									']]..domain_uuid..[[', 
-									']]..ring_group_uuid..[[', 
-									']]..destination_number..[[', 
-									]]..destination_delay..[[, 
+									']]..domain_uuid..[[',
+									']]..ring_group_uuid..[[',
+									']]..destination..[[',
+									]]..destination_delay..[[,
 									]]..destination_timeout..[[
 								)]];
-					--freeswitch.consoleLog("NOTICE", "[ring_group][destination] SQL "..sql.."\n");
+					freeswitch.consoleLog("NOTICE", "[ring_group][destination] SQL "..sql.."\n");
 					dbh:query(sql);
 
 					freeswitch.consoleLog("NOTICE", "[ring_group][destination] LOG IN\n");
@@ -138,12 +148,12 @@
 		end
 		if (menu_selection == "2") then
 			sql = [[
-				DELETE FROM 
-					v_ring_group_destinations 
-				WHERE 
-					domain_uuid =']]..domain_uuid..[[' 
-					AND ring_group_uuid=']]..ring_group_uuid..[['  
-					AND destination_number=']]..destination_number..[['
+				DELETE FROM
+					v_ring_group_destinations
+				WHERE
+					domain_uuid =']]..domain_uuid..[['
+					AND ring_group_uuid=']]..ring_group_uuid..[['
+					AND destination_number=']]..destination..[['
 				]];
 			freeswitch.consoleLog("NOTICE", "[ring_group][destination] SQL "..sql.."\n");
 			dbh:query(sql);
